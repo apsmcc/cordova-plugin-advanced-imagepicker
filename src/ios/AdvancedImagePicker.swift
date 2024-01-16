@@ -123,7 +123,7 @@ import YPImagePicker
                     "type": "image",
                     "isBase64": asBase64,
                     "src": encodedImage,
-                    "exif": photo.exifMeta
+                    //"exif": photo.exifMeta
                 ]);
                 break;
             case .video(let video):
