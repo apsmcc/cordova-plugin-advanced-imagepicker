@@ -28,9 +28,9 @@ import YPImagePicker
         let defaultMaxCountMessage = "You can select a maximum of " + String(max) + " files";
         let maxCountMessage = options?.value(forKey: "maxCountMessage") as? String ?? defaultMaxCountMessage;
         let buttonText = options?.value(forKey: "buttonText") as? String ?? "";
-        let asBase64 = options?.value(forKey: "asBase64") as? Bool ?? false;
+        let asBase64 = false;
         let videoCompression = options?.value(forKey: "videoCompression") as? String ?? "AVAssetExportPresetHighestQuality";
-        let asJpeg = options?.value(forKey: "asJpeg") as? Bool ?? false;
+        let asJpeg = true;
         let recordingTimeLimit = options?.value(forKey: "recordingTimeLimit") as? Double ?? 60.0;
         let libraryTimeLimit = options?.value(forKey: "libraryTimeLimit") as? Double ?? 60.0;
         let minimumTimeLimit = options?.value(forKey: "minimumTimeLimit") as? Double ?? 3.0;
@@ -122,7 +122,8 @@ import YPImagePicker
                 array.append([
                     "type": "image",
                     "isBase64": asBase64,
-                    "src": encodedImage
+                    "src": encodedImage,
+                    "exif": photo.exifMeta
                 ]);
                 break;
             case .video(let video):
@@ -158,7 +159,7 @@ import YPImagePicker
         if(asBase64) {
             return imageData.base64EncodedString();
         } else {
-            let filePath = self.tempFilePath();
+            let filePath = self.tempFilePath(asJpeg ? "jpg" : "png");
             do {
                 try imageData.write(to: filePath, options: .atomic);
                 return filePath.absoluteString;
